@@ -16,6 +16,7 @@ import { getToken } from '@/utils/token'
 import { IssueType, queryIssues } from './gql/issuesQueries'
 
 export default function GQLProvider({ children }: PropsWithChildren) {
+  console.log(process.env.APP_URL)
   const [client, ssr] = useMemo(() => {
     const ssr = ssrExchange({
       // to make sure it runs only on the client
