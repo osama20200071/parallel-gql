@@ -1,5 +1,6 @@
 'use client'
 
+import Callout from '@/app/_components/Callout'
 import { useSigninMutation } from '@/gql/authMutations'
 import { setToken } from '@/utils/token'
 import { Button, Input, Spinner } from '@nextui-org/react'
@@ -9,7 +10,7 @@ import { FormEvent, useState } from 'react'
 
 const SigninPage = () => {
   const [state, setState] = useState({ password: '', email: '' })
-  const [{ fetching }, signin] = useSigninMutation()
+  const [{ fetching, error }, signin] = useSigninMutation()
   // const [signinResult, signin] = useMutation(SigninMutation)
   const router = useRouter()
 
@@ -31,6 +32,13 @@ const SigninPage = () => {
 
   return (
     <>
+      {error && (
+        <Callout
+          title="Error ⚠️"
+          description="Failed to login, Invalid Credentials"
+          type="error"
+        />
+      )}
       <div className="bg-white rounded-md border p-4 w-full shadow-sm">
         <div className="text-2xl text-black/70">Sign in</div>
         <form onSubmit={handleSignin} className="flex flex-col gap-4 mt-4">

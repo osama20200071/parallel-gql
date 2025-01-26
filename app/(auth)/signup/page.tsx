@@ -1,5 +1,6 @@
 'use client'
 
+import Callout from '@/app/_components/Callout'
 import { useSignupMutation } from '@/gql/authMutations'
 import { setToken } from '@/utils/token'
 import { Button, Input, Spinner } from '@nextui-org/react'
@@ -9,7 +10,7 @@ import { FormEvent, useState } from 'react'
 
 const SignupPage = () => {
   const [state, setState] = useState({ password: '', email: '' })
-  const [{ fetching }, signup] = useSignupMutation()
+  const [{ fetching, error }, signup] = useSignupMutation()
   const router = useRouter()
 
   const handleSignup = async (e: FormEvent<HTMLFormElement>) => {
@@ -28,6 +29,13 @@ const SignupPage = () => {
 
   return (
     <>
+      {error && (
+        <Callout
+          title="Error ⚠️"
+          description="failed to signup, try another email"
+          type="error"
+        />
+      )}
       <div className="bg-white rounded-md border p-4 w-full shadow-sm">
         <div className="text-2xl text-black/70">Sign up</div>
         <form onSubmit={handleSignup} className="flex flex-col gap-4 mt-4">
