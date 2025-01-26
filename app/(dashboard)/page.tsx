@@ -1,7 +1,7 @@
 'use client'
 
 import PageHeader from '../_components/PageHeader'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import {
   Button,
   Modal,
@@ -16,24 +16,17 @@ import {
 } from '@nextui-org/react'
 import { PlusIcon } from 'lucide-react'
 import { useCreateIssueMutation } from '@/gql/issuesMutations'
-import { IssueType, useQueryIssues } from '@/gql/issuesQueries'
+import { useQueryIssues } from '@/gql/issuesQueries'
 import Issue from '../_components/Issue'
 
 const IssuesPage = () => {
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
   const [issueName, setIssueName] = useState('')
   const [issueDescription, setIssueDescription] = useState('')
-  const [_, createIssue] = useCreateIssueMutation()
-  // const [issues, setIssues] = useState<IssueType[]>([])
-  // const [data] = useQueryIssues({ input: { statuses: ['DONE', 'BACKLOG'] } })
+  const [{ fetching: creating }, createIssue] = useCreateIssueMutation()
+
   const [{ data, fetching, error }, reFetch] = useQueryIssues()
   const issues = data?.issues || []
-
-  // useEffect(() => {
-  //   if (data?.issues) {
-  //     setIssues(data?.issues)
-  //   }
-  // }, [data])
 
   const onCreate = async (close: () => void) => {
     console.log('creating')
@@ -49,9 +42,7 @@ const IssuesPage = () => {
       close()
       setIssueName('')
       setIssueDescription('')
-      reFetch()
-
-      // setIssues((prev) => [response.data?.createIssue!, ...prev])
+      reFetch({ requestPolicy: 'cache-and-network' })
     }
   }
 
@@ -133,7 +124,7 @@ const IssuesPage = () => {
                   className="bg-black text-white"
                   onPress={() => onCreate(onClose)}
                 >
-                  Create Issue
+                  {creating ? <Spinner color="default" /> : 'Create Issue'}
                 </Button>
               </ModalFooter>
             </>

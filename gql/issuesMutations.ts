@@ -8,6 +8,7 @@ export const createIssueMutation = gql`
       id
       name
       status
+      createdAt
     }
   }
 `
