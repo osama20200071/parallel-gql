@@ -36,7 +36,8 @@ const IssuesPage = () => {
   // }, [data])
 
   const onCreate = async (close: () => void) => {
-    if (issueDescription.trim() === '' || issueName.trim() === '') {
+    console.log('creating')
+    if (issueName.trim() === '') {
       return
     }
 
