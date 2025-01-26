@@ -1,15 +1,24 @@
 'use client'
-import { PropsWithChildren, useEffect } from 'react'
+import { PropsWithChildren, useEffect, useState } from 'react'
 import Sidebar from './Sidebar'
-import { isAuth } from '@/utils/token'
 import { redirect } from 'next/navigation'
+import { useCurrentUserQuery } from '@/gql/authMutations'
 
 const DashboardLayout = ({ children }: PropsWithChildren) => {
+  const [{ data, fetching }] = useCurrentUserQuery()
   useEffect(() => {
-    if (!isAuth()) {
+    if (!fetching && !data) {
       redirect('/signin')
     }
-  }, [])
+  }, [fetching, data])
+
+  if (fetching) {
+    return (
+      <div className="flex flex-1 justify-center items-center h-screen bg-slate-50">
+        <h1 className="animate-pulse text-slate-600 text-4xl">Loading..</h1>
+      </div>
+    )
+  }
 
   return (
     <div className="relative h-screen w-screen bg-slate-50">

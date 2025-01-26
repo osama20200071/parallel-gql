@@ -14,6 +14,14 @@ type SignupResponse = {
   }
 }
 
+type CurrentUserQueryResponse = {
+  me: {
+    id: string
+    email: string
+    createdAt: Date
+  }
+}
+
 type AuthVariables = {
   input: AuthInput
 }

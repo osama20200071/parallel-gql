@@ -36,6 +36,8 @@ const resolvers = {
   },
   Query: {
     me: async (_, __, ctx) => {
+      if (!ctx.user)
+        throw new GraphQLError('UNAUTHORIZED', { extensions: { code: 401 } })
       return ctx.user
     },
     issues: async (
@@ -54,6 +56,9 @@ const resolvers = {
         throw new GraphQLError('UNAUTHORIZED', { extensions: { code: 401 } })
 
       const andFilters = [eq(issues.userId, ctx.user.id)]
+
+      //* to get all issues for all the users
+      // const andFilters = []
 
       if (input && input.statuses && input.statuses.length) {
         const statusFilters = input.statuses.map((status) =>
